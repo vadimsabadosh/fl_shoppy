@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -72,8 +74,6 @@ class AuthService {
               .setUser(response.body);
 
           var normToken = jsonDecode(response.body)['token'];
-          print('signInUser normToken: ${normToken}');
-
           await prefs.setString('x-auth-token', normToken);
           Navigator.pushNamedAndRemoveUntil(
               context, BottomBar.routeName, (route) => false);

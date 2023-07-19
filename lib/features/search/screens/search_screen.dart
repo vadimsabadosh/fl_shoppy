@@ -1,22 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:shoppy/common/widgets/loader.dart';
 import 'package:shoppy/constants/global_vars.dart';
 import 'package:shoppy/features/home/widgets/address_box.dart';
-import 'package:shoppy/features/home/widgets/deal_of_day.dart';
-import 'package:shoppy/features/home/widgets/top_categories.dart';
-import 'package:shoppy/features/search/screens/search_screen.dart';
-import '../widgets/carousel_image.dart';
+import 'package:shoppy/features/search/services/search_services.dart';
+import 'package:shoppy/features/search/widgets/searched_product.dart';
+import 'package:shoppy/models/product.dart';
 
-class HomeScreen extends StatefulWidget {
-  static const String routeName = "/home";
-  const HomeScreen({super.key});
+class SearchScreen extends StatefulWidget {
+  static const String routeName = "/search-screen";
+  final String searchQuery;
+  const SearchScreen({super.key, required this.searchQuery});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  void navigateToSearchScreen(String value) {
-    Navigator.pushNamed(context, SearchScreen.routeName, arguments: value);
+class _SearchScreenState extends State<SearchScreen> {
+  List<Product>? products;
+  final SearchServices searchServices = SearchServices();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSearchProducts();
+  }
+
+  void fetchSearchProducts() async {
+    products = await searchServices.fetchSearchProducts(
+        context: context, searchQuery: widget.searchQuery);
+    setState(() {});
+  }
+
+  void searchProducts(String query) async {
+    products = await searchServices.fetchSearchProducts(
+        context: context, searchQuery: query);
+    setState(() {});
   }
 
   @override
@@ -42,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     elevation: 1,
                     child: TextFormField(
                       onFieldSubmitted: (String val) {
-                        navigateToSearchScreen(val);
+                        searchProducts(val);
                       },
                       decoration: InputDecoration(
                         prefixIcon: InkWell(
@@ -90,18 +108,23 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: const SingleChildScrollView(
-        child: Column(
-          children: [
-            AddressBox(),
-            SizedBox(height: 10),
-            TopCategories(),
-            SizedBox(height: 10),
-            CarouselImage(),
-            DealOfDay(),
-          ],
-        ),
-      ),
+      body: products == null
+          ? const Loader()
+          : Column(
+              children: [
+                const AddressBox(),
+                const SizedBox(height: 10),
+                Expanded(
+                    child: ListView.builder(
+                  itemCount: products!.length,
+                  itemBuilder: (context, index) {
+                    return SearchedProduct(
+                      product: products![index],
+                    );
+                  },
+                ))
+              ],
+            ),
     );
   }
 }

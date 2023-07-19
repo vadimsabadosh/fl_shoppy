@@ -7,6 +7,7 @@ import 'package:shoppy/common/widgets/custom_button.dart';
 import 'package:shoppy/common/widgets/custom_textfield.dart';
 import 'package:shoppy/constants/global_vars.dart';
 import 'package:shoppy/constants/utils.dart';
+import 'package:shoppy/features/admin/services/admin_services.dart';
 
 class AddProductScreen extends StatefulWidget {
   static const String routeName = "/add-product";
@@ -21,9 +22,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController _descrNameContrl = TextEditingController();
   final TextEditingController _priceNameContrl = TextEditingController();
   final TextEditingController _quantityNameContrl = TextEditingController();
-
+  final AdminServices adminServices = AdminServices();
   List<File> images = [];
-
+  final _addProductFormKey = GlobalKey<FormState>();
   String category = "Mobiles";
 
   List<String> productCategories = [
@@ -36,10 +37,23 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   void selectImages() async {
     var res = await pickImages();
-
     setState(() {
       images = res;
     });
+  }
+
+  void sellProduct() {
+    if (_addProductFormKey.currentState!.validate() && images.isNotEmpty) {
+      adminServices.sellProduct(
+        context: context,
+        name: _productNameContrl.text,
+        description: _descrNameContrl.text,
+        price: double.parse(_priceNameContrl.text),
+        quantity: int.parse(_quantityNameContrl.text),
+        category: category,
+        images: images,
+      );
+    }
   }
 
   @override
@@ -69,6 +83,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       ),
       body: SingleChildScrollView(
         child: Form(
+          key: _addProductFormKey,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
             child: Column(
@@ -130,10 +145,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     maxLines: 6),
                 const SizedBox(height: 10),
                 CustomTextField(
-                    controller: _priceNameContrl, hintText: 'Price'),
+                    controller: _priceNameContrl,
+                    hintText: 'Price',
+                    keyboardType: TextInputType.number),
                 const SizedBox(height: 10),
                 CustomTextField(
-                    controller: _quantityNameContrl, hintText: 'Quantity'),
+                    controller: _quantityNameContrl,
+                    hintText: 'Quantity',
+                    keyboardType: TextInputType.number),
                 const SizedBox(height: 10),
                 SizedBox(
                   width: double.infinity,
@@ -154,7 +173,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                CustomButton(text: 'Sell', onPressed: () {}),
+                CustomButton(text: 'Sell', onPressed: sellProduct),
               ],
             ),
           ),
