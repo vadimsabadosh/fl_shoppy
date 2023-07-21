@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shoppy/constants/global_vars.dart';
 import 'package:shoppy/features/account/screens/account_screen.dart';
+import 'package:shoppy/features/cart/screens/cart_screen.dart';
 import 'package:shoppy/features/home/screens/home_screen.dart';
+import 'package:shoppy/providers/user_provider.dart';
 
 class BottomBar extends StatefulWidget {
   static const String routeName = '/actual-home';
@@ -19,7 +22,7 @@ class _BottomBarState extends State<BottomBar> {
   List<Widget> pages = [
     const HomeScreen(),
     const AccountScreen(),
-    const Center(child: Text('Cart Page')),
+    const CartScreen(),
   ];
 
   void updatePage(int page) {
@@ -30,6 +33,7 @@ class _BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    final userCartLen = context.watch<UserProvider>().user.cart.length;
     return Scaffold(
       body: pages[_page],
       bottomNavigationBar: BottomNavigationBar(
@@ -87,11 +91,11 @@ class _BottomBarState extends State<BottomBar> {
                   ),
                 ),
               ),
-              child: const Badge(
-                label: Text("2"),
+              child: Badge(
+                label: Text("$userCartLen"),
                 backgroundColor: Colors.white,
                 textColor: Colors.black,
-                child: Icon(Icons.shopping_cart_outlined),
+                child: const Icon(Icons.shopping_cart_outlined),
               ),
             ),
             label: '',

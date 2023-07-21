@@ -6,6 +6,7 @@ import 'package:shoppy/common/widgets/custom_button.dart';
 import 'package:shoppy/common/widgets/stars.dart';
 import 'package:shoppy/constants/global_vars.dart';
 import 'package:shoppy/features/product_details/services/product_details_services.dart';
+import 'package:shoppy/features/search/screens/search_screen.dart';
 import 'package:shoppy/models/product.dart';
 import 'package:shoppy/providers/user_provider.dart';
 
@@ -42,6 +43,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     }
   }
 
+  void addToCart() {
+    productDetailsServices.addToCart(context: context, id: widget.product.id!);
+  }
+
+  void navigateToSearchScreen(String value) {
+    Navigator.pushNamed(context, SearchScreen.routeName, arguments: value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +73,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     borderRadius: BorderRadius.circular(7),
                     elevation: 1,
                     child: TextFormField(
-                      onFieldSubmitted: (String val) {},
+                      onFieldSubmitted: navigateToSearchScreen,
                       decoration: InputDecoration(
                         prefixIcon: InkWell(
                           onTap: () {},
@@ -185,7 +194,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               padding: const EdgeInsets.all(10.0),
               child: CustomButton(
                 text: 'Add to cart',
-                onPressed: () {},
+                onPressed: addToCart,
                 color: const Color.fromRGBO(235, 216, 19, 1),
               ),
             ),

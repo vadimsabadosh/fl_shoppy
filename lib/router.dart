@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shoppy/features/address/screens/address_screen.dart';
 import 'package:shoppy/features/admin/screens/add_product_screen.dart';
 import 'package:shoppy/features/auth/screens/auth_screen.dart';
 import 'package:shoppy/features/home/screens/home_screen.dart';
@@ -48,6 +49,13 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         settings: routeSettings,
         builder: (_) =>
             ProductDetailsScreen(product: routeSettings.arguments as Product),
+      );
+    case AddressScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => AddressScreen(
+          totalAmount: routeSettings.arguments.toString(),
+        ),
       );
 
     default:

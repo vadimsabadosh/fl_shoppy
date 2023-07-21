@@ -9,7 +9,6 @@ import 'package:shoppy/common/widgets/bottom_bar.dart';
 import 'package:shoppy/constants/error_handling.dart';
 import 'package:shoppy/constants/global_vars.dart';
 import 'package:shoppy/constants/utils.dart';
-import 'package:shoppy/features/home/screens/home_screen.dart';
 import 'package:shoppy/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:shoppy/providers/user_provider.dart';
@@ -22,13 +21,15 @@ class AuthService {
       required String name}) async {
     try {
       User user = User(
-          id: '',
-          name: name,
-          email: email,
-          password: password,
-          address: '',
-          type: '',
-          token: '');
+        id: '',
+        name: name,
+        email: email,
+        password: password,
+        address: '',
+        type: '',
+        token: '',
+        cart: [],
+      );
       http.Response response = await http.post(
         Uri.parse('$uri/api/user/signup'),
         body: user.toJson(),
