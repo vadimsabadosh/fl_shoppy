@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shoppy/constants/global_vars.dart';
+import 'package:shoppy/features/admin/screens/orders_screen.dart';
 
+import 'analytics_screen.dart';
 import 'posts_screen.dart';
 
 class AdminScreen extends StatefulWidget {
@@ -17,8 +19,8 @@ class _AdminScreenState extends State<AdminScreen> {
 
   List<Widget> pages = [
     const PostsScreen(),
-    const Center(child: Text('Analytic Page')),
-    const Center(child: Text('Cart Page')),
+    const AnalyticsScreen(),
+    const OrdersScreen(),
   ];
 
   void updatePage(int page) {

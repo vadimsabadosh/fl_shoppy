@@ -4,10 +4,12 @@ import 'package:shoppy/features/admin/screens/add_product_screen.dart';
 import 'package:shoppy/features/auth/screens/auth_screen.dart';
 import 'package:shoppy/features/home/screens/home_screen.dart';
 import 'package:shoppy/features/product_details/screens/product_details_screen.dart';
+import 'package:shoppy/models/order.dart';
 import 'package:shoppy/models/product.dart';
 
 import 'common/widgets/bottom_bar.dart';
 import 'features/home/screens/category_deals_screen.dart';
+import 'features/order_details/screens/order_details_screen.dart';
 import 'features/search/screens/search_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -58,6 +60,13 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
         ),
       );
 
+    case OrderDetailsScreen.routeName:
+      return MaterialPageRoute(
+        settings: routeSettings,
+        builder: (_) => OrderDetailsScreen(
+          order: routeSettings.arguments as Order,
+        ),
+      );
     default:
       return MaterialPageRoute(
         settings: routeSettings,
